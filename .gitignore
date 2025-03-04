@@ -6,6 +6,7 @@ packages/
 *.suo
 *.sln.docstates
 .vs/
+.idea/
 publish/
 Thumbs.db
 *.DS_Store
