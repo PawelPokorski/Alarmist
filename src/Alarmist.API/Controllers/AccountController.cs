@@ -1,4 +1,3 @@
-using Alarmist.API.Models;
 using Alarmist.Application.Account.Commands.AddUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
