@@ -3,4 +3,4 @@ using Alarmist.Application.DTOs;
 
 namespace Alarmist.Application.Account.Queries.GetUsers;
 
-public record GetUsersQuery() : IQuery<IEnumerable<UserDto>>;
+public record GetUsersQuery : IQuery<IEnumerable<UserDto>>;

@@ -1,4 +1,4 @@
-using BCrypt.Net;
+using BC = BCrypt.Net.BCrypt;
 
 namespace Alarmist.Domain.Entities;
 
@@ -15,8 +15,13 @@ public class User : Entity
 
     public static User Create(string email, string password)
     {
-        var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var passwordHash = BC.HashPassword(password);
      
         return new User(email, passwordHash);
+    }
+
+    public bool VerifyPassword(string password)
+    {
+        return BC.Verify(password, PasswordHash);
     }
 }

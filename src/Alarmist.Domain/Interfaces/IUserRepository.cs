@@ -4,7 +4,7 @@ namespace Alarmist.Domain.Interfaces;
 
 public interface IUserRepository
 {
-    Task<User> FindByEmail(string email);
+    Task<User> FindByEmail(string email, CancellationToken cancellationToken);
 
     void Add(User user);
     void Update(User user);
