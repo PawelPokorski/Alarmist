@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alarmist.Domain\Alarmist.Domain.csproj" />
+    <ProjectReference Include="..\Alarmist.Application\Alarmist.Application.csproj" />
+    <ProjectReference Include="..\Alarmist.Infrastructure\Alarmist.Infrastructure.csproj" />
+    <ProjectReference Include="..\Alarmist.Presentation\Alarmist.Presentation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
