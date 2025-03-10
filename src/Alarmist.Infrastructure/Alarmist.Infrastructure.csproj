@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Alarmist.Application\Alarmist.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Persistence\Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

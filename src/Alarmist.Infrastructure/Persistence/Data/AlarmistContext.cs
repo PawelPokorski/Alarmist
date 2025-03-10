@@ -11,7 +11,6 @@ public class AlarmistContext(DbContextOptions<AlarmistContext> options) : DbCont
     {
         base.OnModelCreating(modelBuilder);
         
-        // Tutaj będziemy dodawać konfiguracje dla naszych encji
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AlarmistContext).Assembly);
     }
 } 
