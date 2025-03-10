@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alarmist.Infrastructure.Persistence.Repositories;
 
-public class UserRepository(AlarmistContext context, IUnitOfWork unitOfWork) : IUserRepository
+public class UserRepository(AlarmistContext context) : IUserRepository
 {
     public async Task<User> FindByEmail(string email)
     {
@@ -15,18 +15,15 @@ public class UserRepository(AlarmistContext context, IUnitOfWork unitOfWork) : I
     public void Add(User user)
     {
         context.Users.Add(user);
-        unitOfWork.CommitChanges();
     }
 
     public void Update(User user)
     {
         context.Users.Update(user);
-        unitOfWork.CommitChanges();
     }
 
     public void Delete(User user)
     {
         context.Users.Remove(user);
-        unitOfWork.CommitChanges();
     }
 }

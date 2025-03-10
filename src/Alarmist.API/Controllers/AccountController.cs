@@ -1,3 +1,4 @@
+using Alarmist.API.Models;
 using Alarmist.Application.Account.Commands.AddUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -5,23 +6,33 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alarmist.API.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
-public class AccountController(IMediator mediator) : ControllerBase
+[ApiController]
+public class AccountController(IMediator mediator) : Controller
 {
-    
-    [HttpPost]
-    [SwaggerOperation("Add user")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<IActionResult> Register(AddUserCommand command)
+    public IActionResult Register()
     {
+        return View();
+    }
+
+    [HttpPost]
+    [SwaggerOperation("Create user")]
+    public async Task<IActionResult> Register(UserViewModel viewModel)
+    {
+        if(!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var command = new AddUserCommand(viewModel.Email, viewModel.Password);
+
         var result = await mediator.Send(command);
 
         if (result.IsSuccess)
         {
-            return Ok();
+            return Created();
         }
 
-        return BadRequest(result.Errors);
+        return Conflict(result.Errors);
     }
 }

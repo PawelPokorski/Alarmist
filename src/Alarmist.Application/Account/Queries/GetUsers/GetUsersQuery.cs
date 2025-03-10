@@ -1,5 +1,5 @@
-using Alarmist.Application.Account.DTOs;
 using Alarmist.Application.Common.Queries;
+using Alarmist.Application.DTOs;
 
 namespace Alarmist.Application.Account.Queries.GetUsers;
 
