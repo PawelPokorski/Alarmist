@@ -1,0 +1,31 @@
+# .NET build folders
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider files
+.idea/
+*.sln.iml
+
+# Visual Studio Code files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Front-end libraries
+**/wwwroot/lib/
+**/wwwroot/css/
+**/wwwroot/js/
+node_modules/
