@@ -29,3 +29,6 @@ obj/
 **/wwwroot/css/
 **/wwwroot/js/
 node_modules/
+
+# Application settings
+**/appsettings.Development.json
