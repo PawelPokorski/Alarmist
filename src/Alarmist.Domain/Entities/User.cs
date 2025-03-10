@@ -1,10 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Alarmist.Domain.Entities;
 
-public class User
+public class User : Entity
 {
-    public Guid Id { get; private set; }
     public string Email { get; private set; }
     public string PasswordHash { get; private set; }
-
-    // logika biznesowa
 }

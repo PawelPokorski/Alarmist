@@ -1,6 +1,7 @@
 using Alarmist.Application.Account.Commands.AddUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alarmist.API.Controllers;
 
@@ -9,7 +10,9 @@ namespace Alarmist.API.Controllers;
 public class AccountController(IMediator mediator) : ControllerBase
 {
     
-    [HttpPost("register")]
+    [HttpPost]
+    [SwaggerOperation("Add user")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Register(AddUserCommand command)
     {
         var result = await mediator.Send(command);

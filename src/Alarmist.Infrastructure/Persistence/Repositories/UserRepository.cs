@@ -3,7 +3,7 @@ using Alarmist.Domain.Interfaces;
 using Alarmist.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Alarmist.Infrastructure.Repositories;
+namespace Alarmist.Infrastructure.Persistence.Repositories;
 
 public class UserRepository(AlarmistContext context, IUnitOfWork unitOfWork) : IUserRepository
 {

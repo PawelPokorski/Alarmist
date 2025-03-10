@@ -1,7 +1,7 @@
 ﻿using Alarmist.Domain.Interfaces;
 using Alarmist.Infrastructure.Persistence.Data;
 
-namespace Alarmist.Infrastructure;
+namespace Alarmist.Infrastructure.Persistence;
 
 public class UnitOfWork(AlarmistContext context) : IUnitOfWork
 {

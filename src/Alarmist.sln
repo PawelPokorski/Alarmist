@@ -12,8 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alarmist.Domain", "Alarmist
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alarmist.Infrastructure", "Alarmist.Infrastructure\Alarmist.Infrastructure.csproj", "{488B03D1-9175-FDE0-DF27-A399B91F1A7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alarmist.Presentation", "Alarmist.Presentation\Alarmist.Presentation.csproj", "{ABC12720-8EEA-BC51-662A-05C83F790100}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,10 +34,6 @@ Global
 		{488B03D1-9175-FDE0-DF27-A399B91F1A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{488B03D1-9175-FDE0-DF27-A399B91F1A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{488B03D1-9175-FDE0-DF27-A399B91F1A7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABC12720-8EEA-BC51-662A-05C83F790100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABC12720-8EEA-BC51-662A-05C83F790100}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABC12720-8EEA-BC51-662A-05C83F790100}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABC12720-8EEA-BC51-662A-05C83F790100}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,7 +43,6 @@ Global
 		{014D60BE-81F4-C4FC-9D84-5FA41BB146BE} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{CC80352D-A3A5-749C-CA99-9EBA810D689D} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{488B03D1-9175-FDE0-DF27-A399B91F1A7F} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{ABC12720-8EEA-BC51-662A-05C83F790100} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3954505-3192-4EB2-941C-6D53E50C3074}
