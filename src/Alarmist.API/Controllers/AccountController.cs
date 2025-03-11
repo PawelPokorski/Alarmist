@@ -12,12 +12,6 @@ namespace Alarmist.API.Controllers;
 [ApiController]
 public class AccountController(IMediator mediator) : Controller
 {
-    //[HttpGet]
-    //public IActionResult Register()
-    //{
-    //    return View();
-    //}
-
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserViewModel viewModel)
     {
@@ -85,28 +79,4 @@ public class AccountController(IMediator mediator) : Controller
 
         return Ok(result);
     }
-
-    
-
-
-    //[HttpPost]
-    //[SwaggerOperation("Login user")]
-    //public async Task<IActionResult> Login(UserViewModel viewModel)
-    //{
-    //    var user = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
-
-    //    if(user == null)
-    //    {
-    //        return BadRequest("Nieprawidłowy login lub hasło");
-    //    }
-
-    //    var isPasswordValid = user.VerifyPassword(viewModel.Password);
-
-    //    if(isPasswordValid)
-    //    {
-    //        return Ok();
-    //    }
-
-    //    return BadRequest("Nieprawidłowy login lub hasło");
-    //}
 }
