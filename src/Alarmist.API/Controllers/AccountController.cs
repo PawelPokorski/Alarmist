@@ -1,6 +1,7 @@
 using Alarmist.API.Models;
 using Alarmist.Application.Account.Commands.AddUser;
 using Alarmist.Application.Account.Queries.GetUserByEmail;
+using Alarmist.Application.Account.Queries.GetUsers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -11,14 +12,13 @@ namespace Alarmist.API.Controllers;
 [ApiController]
 public class AccountController(IMediator mediator) : Controller
 {
-    [HttpGet]
-    public IActionResult Register()
-    {
-        return View();
-    }
+    //[HttpGet]
+    //public IActionResult Register()
+    //{
+    //    return View();
+    //}
 
-    [HttpPost]
-    [SwaggerOperation("Create user")]
+    [HttpPost("register")]
     public async Task<IActionResult> Register(UserViewModel viewModel)
     {
         if(!ModelState.IsValid)
@@ -38,22 +38,75 @@ public class AccountController(IMediator mediator) : Controller
         return Conflict(result.Errors);
     }
 
-    public async Task<IActionResult> Login(UserViewModel viewModel)
+    [HttpPost("login")]
+    public async Task<IActionResult> VerifyUser(UserViewModel viewModel)
     {
-        var user = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
+        var command = new GetUserByEmailQuery(viewModel.Email);
 
-        if(user == null)
+        var result = await mediator.Send(command);
+
+        if (result == null || !result.VerifyPassword(viewModel.Password))
         {
             return BadRequest("Nieprawidłowy login lub hasło");
         }
 
-        var isPasswordValid = user.VerifyPassword(viewModel.Password);
+        return Ok("Pomyślnie zalogowano");
+    }
 
-        if(isPasswordValid)
+    [HttpGet]
+    [SwaggerOperation("Get users")]
+    public async Task<IActionResult> Get()
+    {
+        var command = new GetUsersQuery();
+
+        var result = await mediator.Send(command);
+
+        if (result == null)
         {
-            return Ok();
+            return NotFound();
         }
 
-        return BadRequest("Nieprawidłowy login lub hasło");
+        return Ok(result);
     }
+
+
+    [HttpGet("{email}")]
+    [SwaggerOperation("Get user by email")]
+    public async Task<IActionResult> GetByEmail(string email)
+    {
+        var command = new GetUserByEmailQuery(email);
+
+        var result = await mediator.Send(command);
+
+        if(result == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    
+
+
+    //[HttpPost]
+    //[SwaggerOperation("Login user")]
+    //public async Task<IActionResult> Login(UserViewModel viewModel)
+    //{
+    //    var user = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
+
+    //    if(user == null)
+    //    {
+    //        return BadRequest("Nieprawidłowy login lub hasło");
+    //    }
+
+    //    var isPasswordValid = user.VerifyPassword(viewModel.Password);
+
+    //    if(isPasswordValid)
+    //    {
+    //        return Ok();
+    //    }
+
+    //    return BadRequest("Nieprawidłowy login lub hasło");
+    //}
 }

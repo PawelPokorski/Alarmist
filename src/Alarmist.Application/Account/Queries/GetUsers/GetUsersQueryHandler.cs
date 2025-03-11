@@ -1,17 +1,18 @@
 using Alarmist.Application.Common.Queries;
 using Alarmist.Application.DTOs;
+using Alarmist.Domain.Interfaces;
+using AutoMapper;
 
 namespace Alarmist.Application.Account.Queries.GetUsers;
 
-public class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, IEnumerable<UserDto>>
+public class GetUsersQueryHandler(IUserRepository userRepository, IMapper mapper) : IQueryHandler<GetUsersQuery, IEnumerable<UserDto>>
 {
     public async Task<IEnumerable<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        // TODO: Implementacja logiki pobierania użytkowników
-        // 1. Pobranie użytkowników z bazy
-        // 2. Mapowanie na DTOs
-        // 3. Zwrócenie wyników
-        
-        return new List<UserDto>();
+        var users = await userRepository.GetAllAsync(cancellationToken);
+
+        var userDtos = mapper.Map<IEnumerable<UserDto>>(users);
+
+        return userDtos;
     }
 }

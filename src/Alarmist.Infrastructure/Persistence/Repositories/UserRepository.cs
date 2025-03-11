@@ -12,6 +12,11 @@ public class UserRepository(AlarmistContext context) : IUserRepository
         return await context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 
+    public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.Users.ToListAsync(cancellationToken);
+    }
+
     public void Add(User user)
     {
         context.Users.Add(user);
