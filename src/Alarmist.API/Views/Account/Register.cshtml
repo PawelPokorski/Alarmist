@@ -1,0 +1,37 @@
+﻿@using Alarmist.API.Models;
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_SigningLayout";
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="login-box">
+    <div class="login-header">
+        <header>Register</header>
+    </div>
+
+    <form method="post" asp-page-handler="" asp-antiforgery="true">
+        <div class="input-box">
+            <input type="email" asp-for="Email" class="input-field" placeholder="Email" autocomplete="off" required />
+        </div>
+        <div class="input-box">
+            <input type="password" asp-for="Password" class="input-field" placeholder="Password" autocomplete="off" required />
+        </div>
+
+        <div class="input-box">
+            <input type="password" asp-for="PasswordRepeat" class="input-field" placeholder="Repeat password" autocomplete="off" required />
+        </div>
+
+        <div class="input-submit">
+            <button type="submit" class="submit-btn" id="submit"></button>
+            <label for="submit">Sign Up</label>
+        </div>
+
+        <div class="sign-up-link">
+            <p>Already have an account? <a href="/account-login">Sign in</a></p>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </form>
+</div>

@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_HomeLayout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>You are logged in!</p>
+    <form method="post" asp-controller="Account" asp-action="Logout">
+        <button type="submit">Logout</button>
+    </form>
+</div>

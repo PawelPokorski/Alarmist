@@ -1,0 +1,55 @@
+﻿@using Alarmist.API.Models;
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_SigningLayout";
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="login-box">
+    <div class="login-header">
+        <header>Logowanie</header>
+    </div>
+
+    <form method="post" asp-action="Login" asp-controller="Account" asp-antiforgery="true">
+        <div class="input-box">
+            <input type="email" asp-for="Email" class="input-field" placeholder="Email" autocomplete="off" required />
+        </div>
+        <div class="input-box">
+            <input type="password" asp-for="Password" class="input-field" placeholder="Hasło" autocomplete="off" required />
+        </div>
+
+        <div class="forgot">
+            <section>
+                <input type="checkbox" asp-for="RememberMe" id="check" />
+                <label for="check">Zapamiętaj mnie</label>
+            </section>
+            <section>
+                <a href="#">Nie pamiętasz hasła?</a>
+            </section>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="input-submit">
+            <button type="submit" class="submit-btn" id="submit"></button>
+            <label for="submit">Sign In</label>
+        </div>
+
+        <div class="social-login">
+            <p>Or sign in with</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon google">
+                    <i class="fab fa-google"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="sign-up-link">
+            <p>Don't have account? <a href="/account-register">Sign up</a></p>
+        </div>
+    </form>
+</div>

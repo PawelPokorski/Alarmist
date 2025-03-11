@@ -1,0 +1,140 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif;
+}
+
+.login-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 440px;
+    height: 480px;
+    padding: 30px;
+}
+
+.login-header {
+    text-align: center;
+    margin: 20px 0 40px 0;
+}
+
+    .login-header header {
+        color: #333;
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+
+::placeholder {
+    font-weight: 500;
+    color: #222;
+}
+
+
+.forgot {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    min-height: 20px; /* Dostosuj wartość do wysokości komunikatu o błędzie */
+}
+
+section {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+#check {
+    margin-right: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+    a:not(.social-icon):hover {
+        text-decoration: underline;
+    }
+
+section a {
+    color: #555;
+}
+
+.input-submit {
+    position: relative;
+    min-height: 60px; /* Dostosuj wartość do wysokości przycisku */
+}
+
+.submit-btn {
+    width: 100%;
+    height: 60px;
+    background: #222;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.input-submit label {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    color: #fff;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #000;
+    transform: scale(1.05,1);
+}
+
+.sign-up-link {
+    text-align: center;
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+    .sign-up-link a {
+        color: #000;
+        font-weight: 600;
+    }
+
+.social-login {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.social-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 10px;
+    font-size: 20px;
+    color: #fff;
+}
+
+    .social-icon:hover {
+        filter: brightness(1.15); /* Rozjaśnienie o 20% */
+    }
+
+    .social-icon.facebook {
+        background: #1877f2;
+    }
+
+    .social-icon.google {
+        background: #db4437;
+    }

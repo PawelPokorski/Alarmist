@@ -1,4 +1,6 @@
-﻿namespace Alarmist.API;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+
+namespace Alarmist.API;
 
 public static class Extensions
 {
@@ -10,6 +12,13 @@ public static class Extensions
         {
             swagger.EnableAnnotations();
         });
+
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/account-login";
+                options.LogoutPath = "/account-logout";
+            });
 
         return services;
     }
@@ -26,8 +35,9 @@ public static class Extensions
         app.UseStaticFiles();
 
         app.UseRouting();
-
         app.UseAuthorization();
+        app.UseAuthentication();
+
 
         app.MapControllerRoute(
             name: "default",

@@ -3,21 +3,34 @@ using Alarmist.Application.Account.Commands.AddUser;
 using Alarmist.Application.Account.Queries.GetUserByEmail;
 using Alarmist.Application.Account.Queries.GetUsers;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace Alarmist.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
 public class AccountController(IMediator mediator) : Controller
 {
-    [HttpPost("register")]
+    [Route("account-login")]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [Route("account-register")]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost("account-register")]
     public async Task<IActionResult> Register(UserViewModel viewModel)
     {
         if(!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            return View(viewModel);
         }
 
         var command = new AddUserCommand(viewModel.Email, viewModel.Password);
@@ -32,8 +45,8 @@ public class AccountController(IMediator mediator) : Controller
         return Conflict(result.Errors);
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> VerifyUser(UserViewModel viewModel)
+    [HttpPost("account-login")]
+    public async Task<IActionResult> Login(LoginViewModel viewModel)
     {
         var command = new GetUserByEmailQuery(viewModel.Email);
 
@@ -41,10 +54,23 @@ public class AccountController(IMediator mediator) : Controller
 
         if (result == null || !result.VerifyPassword(viewModel.Password))
         {
-            return BadRequest("Nieprawidłowy login lub hasło");
+            ModelState.AddModelError(string.Empty, "Nieprawidłowy login lub hasło");
+            return View(viewModel);
         }
 
-        return Ok("Pomyślnie zalogowano");
+        var claims = new List<Claim> { new(ClaimTypes.Name, viewModel.Email) };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            IsPersistent = viewModel.RememberMe
+        };
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+        //return RedirectToAction("Index", "Home");
+        return Ok("Zalogowano pomyślnie");
     }
 
     [HttpGet]
