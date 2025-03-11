@@ -9,6 +9,7 @@ public static class Extensions
     {
         var executingAssembly = Assembly.GetExecutingAssembly();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(executingAssembly));
+        services.AddAutoMapper(executingAssembly);
 
         return services;
     }

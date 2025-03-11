@@ -19,9 +19,4 @@ public class User : Entity
      
         return new User(email, passwordHash);
     }
-
-    public bool VerifyPassword(string password)
-    {
-        return BC.Verify(password, PasswordHash);
-    }
 }

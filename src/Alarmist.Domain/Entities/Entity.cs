@@ -4,6 +4,13 @@ namespace Alarmist.Domain.Entities;
 
 public class Entity
 {
+    protected Entity()
+    {
+        Id = Guid.NewGuid();
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
     [Key]
     public Guid Id { get; private set; }
     public DateTime CreatedAt { get; private set; }

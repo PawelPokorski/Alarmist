@@ -1,5 +1,6 @@
 using Alarmist.API.Models;
 using Alarmist.Application.Account.Commands.AddUser;
+using Alarmist.Application.Account.Queries.GetUserByEmail;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -41,11 +42,18 @@ public class AccountController(IMediator mediator) : Controller
     {
         var user = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
 
-        if(user != null && user.VerifyPassword(viewModel.Password))
+        if(user == null)
+        {
+            return BadRequest("Nieprawidłowy login lub hasło");
+        }
+
+        var isPasswordValid = user.VerifyPassword(viewModel.Password);
+
+        if(isPasswordValid)
         {
             return Ok();
         }
 
-        return BadRequest("Nieprawid�owy login lub has�o");
+        return BadRequest("Nieprawidłowy login lub hasło");
     }
 }
