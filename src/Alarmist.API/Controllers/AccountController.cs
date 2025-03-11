@@ -46,6 +46,6 @@ public class AccountController(IMediator mediator) : Controller
             return Ok();
         }
 
-        return BadRequest("Nieprawid³owy login lub has³o");
+        return BadRequest("Nieprawidï¿½owy login lub hasï¿½o");
     }
 }

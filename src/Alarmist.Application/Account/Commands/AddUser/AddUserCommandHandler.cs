@@ -9,7 +9,7 @@ public class AddUserCommandHandler(IUserRepository userRepository, IUnitOfWork u
 {
     public async Task<Result> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        if(await userRepository.FindByEmail(request.Email) != null)
+        if(await userRepository.FindByEmail(request.Email, cancellationToken) != null)
         {
             return Result.Failure("Email already in use.");
         }
