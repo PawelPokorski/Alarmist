@@ -1,14 +1,14 @@
 ﻿@using Alarmist.API.Models;
 @model LoginViewModel
 @{
-    ViewData["Title"] = "Zaloguj się";
-    Layout = "_SigningLayout";
+    ViewData["Title"] = "Alarmist - Logowanie";
+    Layout = "_AccountLayout";
 }
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<div class="login-box">
-    <div class="login-header">
+<div class="form-box">
+    <div class="form-header">
         <header>Logowanie</header>
     </div>
 
@@ -22,8 +22,8 @@
 
         <div class="forgot">
             <section>
-                <input type="checkbox" asp-for="RememberMe" id="check" />
-                <label for="check">Zapamiętaj mnie</label>
+                <input type="checkbox" asp-for="RememberMe" id="check" class="check" />
+                <label for="check" class="check">Zapamiętaj mnie</label>
             </section>
             <section>
                 <a href="/account-reset-password">Nie pamiętasz hasła?</a>
@@ -37,18 +37,18 @@
         </div>
 
         <div class="social-login">
-            <p>Zaloguj się przez</p>
+            <p>Lub zaloguj się przez</p>
             <div class="social-icons">
-                <a href="#" class="social-icon facebook">
+                <a href="#" class="social-icon facebook" title="Zaloguj się przez Facebook">
                     <i class="fab fa-facebook-f"></i>
                 </a>
-                <a href="#" class="social-icon google">
+                <a href="#" class="social-icon google" title="Zaloguj się przez Google">
                     <i class="fab fa-google"></i>
                 </a>
             </div>
         </div>
 
-        <div class="sign-up-link">
+        <div class="form-link">
             <p>Nie masz konta? <a href="/account-register">Zarejestruj się</a></p>
         </div>
     </form>
