@@ -4,6 +4,7 @@ using Alarmist.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alarmist.Infrastructure.Persistence.Data.Migrations
 {
     [DbContext(typeof(AlarmistContext))]
-    partial class AlarmistContextModelSnapshot : ModelSnapshot
+    [Migration("20250312202802_Add Email Verification Column")]
+    partial class AddEmailVerificationColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +33,6 @@ namespace Alarmist.Infrastructure.Persistence.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -51,15 +51,6 @@ namespace Alarmist.Infrastructure.Persistence.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("VerificationCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("VerificationCodeExpiry")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("VerificationCodeResendTimer")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

@@ -40,34 +40,70 @@ public class AccountController(IMediator mediator) : Controller
         }
 
         var command = new AddUserCommand(viewModel.Email, viewModel.Password);
-
         var result = await mediator.Send(command);
 
         if (result.IsSuccess)
         {
-            return Created();
+            var userDto = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
+            userDto.GenerateVerificationCode();
+            //await mediator.Send(new UpdateUserCommand(userDto));
+
+            return RedirectToAction("VerifyEmail");
         }
 
         return Conflict(result.Errors);
     }
 
+    [HttpGet("account-verification")]
+    public async Task<IActionResult> VerifyEmail()
+    {
+        var userDto = await mediator.Send(new GetUserByEmailQuery(User.Identity.Name));
+        if (userDto.VerificationCodeExpiry < DateTime.UtcNow && userDto.VerificationCodeResendCooldown < DateTime.UtcNow)
+        {
+            userDto.GenerateVerificationCode();
+            //await mediator.Send(new UpdateUserCommand(userDto));
+
+            // Wyślij e-mail
+        }
+        return View();
+    }
+
+    [HttpPost("account-verification")]
+    public async Task<IActionResult> VerifyEmail(string verificationCode)
+    {
+        var userDto = await mediator.Send(new GetUserByEmailQuery(User.Identity.Name));
+
+        if (userDto.VerifyCode(verificationCode))
+        {
+            userDto.EmailVerified = true;
+            userDto.VerificationCode = null;
+            userDto.VerificationCodeExpiry = null;
+            //await mediator.Send(new UpdateUserCommand(userDto));
+            return RedirectToAction("Login");
+        }
+
+        ModelState.AddModelError(string.Empty, "Nieprawidłowy kod weryfikacyjny.");
+        return View();
+    }
+
     [HttpPost("account-login")]
     public async Task<IActionResult> Login(LoginViewModel viewModel)
     {
-        var command = new GetUserByEmailQuery(viewModel.Email);
+        var userDto = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
 
-        var result = await mediator.Send(command);
-
-        if (result == null || !result.VerifyPassword(viewModel.Password))
+        if(userDto == null || !userDto.VerifyPassword(viewModel.Password))
         {
             ModelState.AddModelError(string.Empty, "Nieprawidłowy login lub hasło");
             return View(viewModel);
         }
 
+        if(!userDto.IsEmailVerified())
+        {
+            return RedirectToAction("VerifyEmail");
+        }
+
         var claims = new List<Claim> { new(ClaimTypes.Name, viewModel.Email) };
-
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = viewModel.RememberMe
@@ -77,38 +113,5 @@ public class AccountController(IMediator mediator) : Controller
 
         //return RedirectToAction("Index", "Home");
         return Ok("Zalogowano pomyślnie");
-    }
-
-    [HttpGet]
-    [SwaggerOperation("Get users")]
-    public async Task<IActionResult> Get()
-    {
-        var command = new GetUsersQuery();
-
-        var result = await mediator.Send(command);
-
-        if (result == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(result);
-    }
-
-
-    [HttpGet("{email}")]
-    [SwaggerOperation("Get user by email")]
-    public async Task<IActionResult> GetByEmail(string email)
-    {
-        var command = new GetUserByEmailQuery(email);
-
-        var result = await mediator.Send(command);
-
-        if(result == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(result);
     }
 }
