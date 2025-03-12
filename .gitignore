@@ -24,11 +24,5 @@ obj/
 .AppleDouble
 .LSOverride
 
-# Front-end libraries
-**/wwwroot/lib/
-**/wwwroot/css/
-**/wwwroot/js/
-node_modules/
-
 # Application settings
 **/appsettings.Development.json
