@@ -25,6 +25,12 @@ public class AccountController(IMediator mediator) : Controller
         return View();
     }
 
+    [Route("account-reset-password")]
+    public IActionResult ResetPassword()
+    {
+        return View();
+    }
+
     [HttpPost("account-register")]
     public async Task<IActionResult> Register(UserViewModel viewModel)
     {

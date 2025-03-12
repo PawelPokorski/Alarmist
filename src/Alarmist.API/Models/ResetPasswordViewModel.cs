@@ -2,8 +2,12 @@
 
 namespace Alarmist.API.Models;
 
-public class ChangePasswordViewModel
+public class ResetPasswordViewModel
 {
+    [DataType(DataType.EmailAddress)]
+    [Required(ErrorMessage = "Email is required.")]
+    public string Email { get; set; }
+
     [DataType(DataType.Password)]
     [Required(ErrorMessage = "Password is required.")]
     public string CurrentPassword { get; set; }

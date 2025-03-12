@@ -1,7 +1,7 @@
 ﻿@using Alarmist.API.Models;
 @model LoginViewModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Zaloguj się";
     Layout = "_SigningLayout";
 }
 
@@ -26,18 +26,18 @@
                 <label for="check">Zapamiętaj mnie</label>
             </section>
             <section>
-                <a href="#">Nie pamiętasz hasła?</a>
+                <a href="/account-reset-password">Nie pamiętasz hasła?</a>
             </section>
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="input-submit">
             <button type="submit" class="submit-btn" id="submit"></button>
-            <label for="submit">Sign In</label>
+            <label for="submit">Zaloguj się</label>
         </div>
 
         <div class="social-login">
-            <p>Or sign in with</p>
+            <p>Zaloguj się przez</p>
             <div class="social-icons">
                 <a href="#" class="social-icon facebook">
                     <i class="fab fa-facebook-f"></i>
@@ -49,7 +49,7 @@
         </div>
 
         <div class="sign-up-link">
-            <p>Don't have account? <a href="/account-register">Sign up</a></p>
+            <p>Nie masz konta? <a href="/account-register">Zarejestruj się</a></p>
         </div>
     </form>
 </div>
