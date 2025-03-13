@@ -1,5 +1,6 @@
 using Alarmist.API.Models;
 using Alarmist.Application.Account.Commands.AddUser;
+using Alarmist.Application.Account.Commands.UpdateUser;
 using Alarmist.Application.Account.Queries.GetUserByEmail;
 using Alarmist.Application.Account.Queries.GetUserById;
 using Alarmist.Application.Account.Queries.GetUsers;
@@ -36,8 +37,9 @@ public class AccountController(IMediator mediator) : Controller
         if (!userDto.IsEmailVerified())
         {
             userDto.GenerateVerificationCode();
+            await mediator.Send(new UpdateUserCommand(userDto));
+            
             TempData["UserId"] = userDto.Id;
-
             return RedirectToAction("VerifyEmail");
         }
 
@@ -78,10 +80,11 @@ public class AccountController(IMediator mediator) : Controller
         if (result.IsSuccess)
         {
             var userDto = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
+            
             userDto.GenerateVerificationCode();
+            await mediator.Send(new UpdateUserCommand(userDto));
 
             TempData["UserId"] = userDto.Id;
-
             return RedirectToAction("VerifyEmail");
         }
 
@@ -138,7 +141,7 @@ public class AccountController(IMediator mediator) : Controller
             userDto.EmailVerified = true;
             userDto.VerificationCode = null;
             userDto.VerificationCodeExpiry = null;
-            //await mediator.Send(new UpdateUserCommand(userDto));
+            await mediator.Send(new UpdateUserCommand(userDto));
             return RedirectToAction("Login");
         }
 
