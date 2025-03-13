@@ -111,7 +111,7 @@ public class AccountController(IMediator mediator) : Controller
         var userId = TempData.Peek("UserId") as Guid?;
         TempData.Remove("UserId");
 
-        if(userId == null)
+        if (userId == null)
         {
             return RedirectToAction("Login");
         }
@@ -128,16 +128,30 @@ public class AccountController(IMediator mediator) : Controller
             userDto.GenerateVerificationCode();
         }
 
+        ViewBag.UserId = userId;
         return View();
     }
 
     [HttpPost("account-verification")]
-    public async Task<IActionResult> VerifyEmail(string verificationCode)
+    public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel viewModel, Guid UserId)
     {
-        var userDto = await mediator.Send(new GetUserByEmailQuery(User.Identity.Name));
-
-        if (userDto.VerifyCode(verificationCode))
+        if(!ModelState.IsValid)
         {
+            Console.WriteLine("Nieprawidłowy model");
+            return View(viewModel);
+        }
+
+
+        var userDto = await mediator.Send(new GetUserByIdQuery(UserId));
+
+        if(userDto == null)
+        {
+            return RedirectToAction("Login");
+        }
+
+        if (userDto.VerifyCode(viewModel.VerificationCode))
+        {
+            Console.WriteLine("Aktywowano stronę");
             userDto.EmailVerified = true;
             userDto.VerificationCode = null;
             userDto.VerificationCodeExpiry = null;
