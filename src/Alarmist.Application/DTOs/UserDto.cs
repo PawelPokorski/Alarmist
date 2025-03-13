@@ -4,14 +4,15 @@ namespace Alarmist.Application.DTOs;
 
 public class UserDto
 {
+    public Guid Id { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
     public string DisplayName { get; set; }
 
     public string VerificationCode { get; set; }
-    public DateTime? VerificationCodeExpiry { get; set; }
+    public DateTimeOffset? VerificationCodeExpiry { get; set; }
     public bool EmailVerified { get; set; }
-    public DateTime? VerificationCodeResendCooldown { get; set; }
+    public DateTimeOffset? VerificationCodeResendCooldown { get; set; }
 
     public bool VerifyPassword(string password)
     {
@@ -26,8 +27,8 @@ public class UserDto
     public void GenerateVerificationCode()
     {
         VerificationCode = new Random().Next(100000, 999999).ToString();
-        VerificationCodeExpiry = DateTime.UtcNow.AddMinutes(15);
-        VerificationCodeResendCooldown = DateTime.UtcNow.AddMinutes(1);
+        VerificationCodeExpiry = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddMinutes(15), TimeZoneInfo.Local);
+        VerificationCodeResendCooldown = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddMinutes(1), TimeZoneInfo.Local);
     }
 
     public bool VerifyCode(string code)

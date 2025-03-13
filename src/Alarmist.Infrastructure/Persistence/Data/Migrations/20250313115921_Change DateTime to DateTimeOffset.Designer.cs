@@ -4,6 +4,7 @@ using Alarmist.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alarmist.Infrastructure.Persistence.Data.Migrations
 {
     [DbContext(typeof(AlarmistContext))]
-    partial class AlarmistContextModelSnapshot : ModelSnapshot
+    [Migration("20250313115921_Change DateTime to DateTimeOffset")]
+    partial class ChangeDateTimetoDateTimeOffset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace Alarmist.Infrastructure.Persistence.Data.Migrations
                     b.Property<DateTimeOffset?>("VerificationCodeExpiry")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("VerificationCodeResendCooldown")
+                    b.Property<DateTimeOffset?>("VerificationCodeResendTimer")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");

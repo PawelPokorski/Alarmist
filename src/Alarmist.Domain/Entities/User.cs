@@ -4,14 +4,14 @@ namespace Alarmist.Domain.Entities;
 
 public class User : Entity
 {
-    public string Email { get; private set; }
-    public string PasswordHash { get; private set; }
-    public string DisplayName { get; private set; }
+    public string Email { get; set; }
+    public string PasswordHash { get; set; }
+    public string DisplayName { get; set; }
 
-    public string VerificationCode { get; private set; }
-    public DateTime? VerificationCodeExpiry { get; private set; }
-    public bool EmailVerified { get; private set; }
-    public DateTime? VerificationCodeResendTimer { get; private set; }
+    public string VerificationCode { get; set; }
+    public DateTimeOffset? VerificationCodeExpiry { get; set; }
+    public bool EmailVerified { get; set; }
+    public DateTimeOffset? VerificationCodeResendCooldown { get; set; }
 
     private User(string email, string passwordHash)
     {
@@ -23,8 +23,13 @@ public class User : Entity
 
     public static User Create(string email, string password)
     {
-        var passwordHash = BC.HashPassword(password);
+        var passwordHash = HashPassword(password);
      
         return new User(email, passwordHash);
+    }
+
+    public static string HashPassword(string password)
+    {
+        return BC.HashPassword(password);
     }
 }

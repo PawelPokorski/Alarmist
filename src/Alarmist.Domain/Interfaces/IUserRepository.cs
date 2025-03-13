@@ -4,6 +4,7 @@ namespace Alarmist.Domain.Interfaces;
 
 public interface IUserRepository
 {
+    Task<User> FindById(Guid id, CancellationToken cancellationToken);
     Task<User> FindByEmail(string email, CancellationToken cancellationToken);
     Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken);
 
