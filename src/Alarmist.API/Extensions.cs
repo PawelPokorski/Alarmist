@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Alarmist.API.Models.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Alarmist.API;
 
 public static class Extensions
 {
-    public static IServiceCollection AddApi(this IServiceCollection services)
+    public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllersWithViews();
 
-        services.AddSwaggerGen(swagger =>
-        {
-            swagger.EnableAnnotations();
-        });
+        services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+        services.AddTransient<IMailService, MailService>();
 
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -42,9 +41,6 @@ public static class Extensions
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
-
-        app.UseSwagger();
-        app.UseSwaggerUI();
 
         return app;
     }

@@ -1,10 +1,9 @@
 using Alarmist.API.Models;
+using Alarmist.API.Models.Services;
 using Alarmist.Application.Account.Commands.AddUser;
 using Alarmist.Application.Account.Commands.UpdateUser;
 using Alarmist.Application.Account.Queries.GetUserByEmail;
 using Alarmist.Application.Account.Queries.GetUserById;
-using Alarmist.Application.Account.Queries.GetUsers;
-using Alarmist.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,7 +12,7 @@ using System.Security.Claims;
 
 namespace Alarmist.API.Controllers;
 
-public class AccountController(IMediator mediator) : Controller
+public class AccountController(IMediator mediator, IMailService mailService) : Controller
 {
     #region Login
 
@@ -118,7 +117,7 @@ public class AccountController(IMediator mediator) : Controller
 
         var userDto = await mediator.Send(new GetUserByIdQuery(userId.Value));
 
-        if(userDto == null)
+        if (userDto == null)
         {
             return RedirectToAction("Login");
         }
@@ -129,7 +128,23 @@ public class AccountController(IMediator mediator) : Controller
         }
 
         ViewBag.UserId = userId;
-        return View();
+
+        var mailRequest = new MailRequest
+        {
+            ToEmail = userDto.Email,
+            Subject = "Kod weryfikacyjny do serwisu Alarmist",
+            Body = $"Twój kod weryfikacyjny to: {userDto.VerificationCode}"
+        };
+
+        try
+        {
+            await mailService.SendEmailAsync(mailRequest);
+            return View();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     [HttpPost("account-verification")]
@@ -137,10 +152,8 @@ public class AccountController(IMediator mediator) : Controller
     {
         if(!ModelState.IsValid)
         {
-            Console.WriteLine("Nieprawidłowy model");
             return View(viewModel);
         }
-
 
         var userDto = await mediator.Send(new GetUserByIdQuery(UserId));
 
@@ -151,16 +164,16 @@ public class AccountController(IMediator mediator) : Controller
 
         if (userDto.VerifyCode(viewModel.VerificationCode))
         {
-            Console.WriteLine("Aktywowano stronę");
             userDto.EmailVerified = true;
             userDto.VerificationCode = null;
             userDto.VerificationCodeExpiry = null;
+            userDto.VerificationCodeResendCooldown = null;
             await mediator.Send(new UpdateUserCommand(userDto));
             return RedirectToAction("Login");
         }
 
         ModelState.AddModelError(string.Empty, "Nieprawidłowy kod weryfikacyjny.");
-        return View();
+        return View(viewModel);
     }
 
     #endregion

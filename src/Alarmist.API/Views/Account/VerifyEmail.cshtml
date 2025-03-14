@@ -6,21 +6,69 @@
 }
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<div class="account-container">
-    <div class="account-box">
-        <h2 class="text-center mb-4">Weryfikacja kodu</h2>
-        <form asp-action="VerifyEmail" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
-                <label asp-for="VerificationCode" class="form-label">Kod weryfikacyjny</label>
-                <input asp-for="VerificationCode" class="form-control" />
-                <span asp-validation-for="VerificationCode" class="text-danger"></span>
-            </div>
-            <input type="hidden" name="UserId" value="@ViewBag.UserId" />
-            <input type="submit" value="Weryfikuj" class="btn btn-success w-100 p-2" />
-            <div class="text-center mt-2">
-                <a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Powrót</a>
-            </div>
-        </form>
+<div class="form-box">
+    <div class="form-header">
+        <header>Weryfikacja konta</header>
     </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <form method="post" asp-action="VerifyEmail" asp-controller="Account" asp-antiforgery="true">
+        <div class="number-input-box">
+            <input type="text" maxlength="1" class="input-number-field" name="digit1" required/>
+            <input type="text" maxlength="1" class="input-number-field" name="digit2" required/>
+            <input type="text" maxlength="1" class="input-number-field" name="digit3" required/>
+            <input type="text" maxlength="1" class="input-number-field" name="digit4" required/>
+            <input type="text" maxlength="1" class="input-number-field" name="digit5" required/>
+            <input type="text" maxlength="1" class="input-number-field" name="digit6" required/>
+        </div>
+
+        <input type="hidden" name="VerificationCode" id="VerificationCode" />
+        <input type="hidden" name="UserId" value="@ViewBag.UserId" />
+
+        <div class="input-submit">
+            <button type="submit" class="submit-btn" id="submit"></button>
+            <label for="submit">Zweryfikuj</label>
+        </div>
+        <div class="form-link">
+            <p>Kod nie dotarł? <a asp-action="ResendVerificationCode" asp-controller="Account" asp-route-userId="@ViewBag.UserId">Wyślij ponownie</a></p>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </form>
 </div>
+
+@section Scripts 
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.input-number-field');
+            const verificationCodeInput = document.getElementById('VerificationCode');
+
+            if (inputs.length > 0) {
+                inputs[0].focus();
+            }
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    if (this.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', function(event) {
+                    if (event.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+            });
+
+            document.querySelector('form').addEventListener('submit', function() {
+            let code = '';
+            inputs.forEach(input => {
+                code += input.value;
+            });
+            verificationCodeInput.value = code;
+        });
+        });
+    </script>
+}

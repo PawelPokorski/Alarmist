@@ -9,7 +9,8 @@ builder.Services.AddApplication();
 // Add Repositories and DbContext
 builder.Services.AddInfrastructure(builder.Configuration);
 // Add Controllers and Swagger
-builder.Services.AddApi();
+builder.Services.AddApi(builder.Configuration);
+
 
 var app = builder.Build();
 
