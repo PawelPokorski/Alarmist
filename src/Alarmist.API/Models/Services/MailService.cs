@@ -19,7 +19,8 @@ public class MailService(IOptions<MailSettings> mailSettings) : IMailService
         try
         {
             var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+
+            email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             email.Subject = mailRequest.Subject;
 

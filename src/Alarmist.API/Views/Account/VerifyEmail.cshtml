@@ -30,7 +30,7 @@
             <label for="submit">Zweryfikuj</label>
         </div>
         <div class="form-link">
-            <p>Kod nie dotarł? <a asp-action="ResendVerificationCode" asp-controller="Account" asp-route-userId="@ViewBag.UserId">Wyślij ponownie</a></p>
+            <p>Kod nie dotarł? <a asp-action="SendVerificationEmail" asp-controller="Account">Wyślij ponownie</a></p>
         </div>
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

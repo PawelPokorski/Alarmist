@@ -15,13 +15,16 @@
     <form method="post" asp-page-handler="" asp-antiforgery="true">
         <div class="input-box">
             <input type="email" asp-for="Email" class="input-field" placeholder="Email" autocomplete="off" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="input-box">
             <input type="password" asp-for="Password" class="input-field" placeholder="Hasło" autocomplete="new-password" required />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
         <div class="input-box">
             <input type="password" asp-for="PasswordRepeat" class="input-field" placeholder="Powtórz hasło" autocomplete="new-password" required />
+            <span asp-validation-for="PasswordRepeat" class="text-danger"></span>
         </div>
 
         <div class="input-submit">

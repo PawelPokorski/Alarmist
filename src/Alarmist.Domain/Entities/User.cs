@@ -9,9 +9,7 @@ public class User : Entity
     public string DisplayName { get; set; }
 
     public string VerificationCode { get; set; }
-    public DateTimeOffset? VerificationCodeExpiry { get; set; }
     public bool EmailVerified { get; set; }
-    public DateTimeOffset? VerificationCodeResendCooldown { get; set; }
 
     private User(string email, string passwordHash)
     {

@@ -4,6 +4,6 @@ namespace Alarmist.API.Models;
 
 public class VerifyEmailViewModel
 {
-    [Required]
+    [Required(ErrorMessage = "Kod jest wymagany")]
     public string VerificationCode { get; set; }
 }

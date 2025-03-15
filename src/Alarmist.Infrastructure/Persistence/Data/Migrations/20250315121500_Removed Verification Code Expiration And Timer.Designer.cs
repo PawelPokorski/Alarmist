@@ -4,6 +4,7 @@ using Alarmist.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alarmist.Infrastructure.Persistence.Data.Migrations
 {
     [DbContext(typeof(AlarmistContext))]
-    partial class AlarmistContextModelSnapshot : ModelSnapshot
+    [Migration("20250315121500_Removed Verification Code Expiration And Timer")]
+    partial class RemovedVerificationCodeExpirationAndTimer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -4,14 +4,13 @@ namespace Alarmist.API.Models;
 
 public class LoginViewModel
 {
-    [Required(ErrorMessage = "Email is required.")]
-    [EmailAddress]
+    [Required(ErrorMessage = "Email jest wymagany")]
+    [EmailAddress(ErrorMessage = "Nieprawidłowy format email")]
     public string Email { get; set; }
 
-    [Required(ErrorMessage = "Password is required.")]
-    [DataType(DataType.Password)]
+    [Required(ErrorMessage = "Hasło jest wymagane")]
+    [MinLength(6, ErrorMessage = "Hasło musi mieć co najmniej 6 znaków")]
     public string Password { get; set; }
 
-    [Display(Name = "Remember me?")]
     public bool RememberMe { get; set; }
 }

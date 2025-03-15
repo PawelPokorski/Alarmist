@@ -23,9 +23,6 @@ public class UpdateUserCommandHandler(IUserRepository userRepository, IMapper ma
         user.EmailVerified = userDto.EmailVerified;
         user.VerificationCode = userDto.VerificationCode;
 
-        user.VerificationCodeExpiry = userDto.VerificationCodeExpiry;
-        user.VerificationCodeResendCooldown = userDto.VerificationCodeResendCooldown;
-
         userRepository.Update(user);
         await unitOfWork.CommitChanges(cancellationToken);
 

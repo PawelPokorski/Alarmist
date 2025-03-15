@@ -4,6 +4,7 @@ using Alarmist.Application.Account.Commands.AddUser;
 using Alarmist.Application.Account.Commands.UpdateUser;
 using Alarmist.Application.Account.Queries.GetUserByEmail;
 using Alarmist.Application.Account.Queries.GetUserById;
+using Alarmist.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -35,9 +36,6 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
 
         if (!userDto.IsEmailVerified())
         {
-            userDto.GenerateVerificationCode();
-            await mediator.Send(new UpdateUserCommand(userDto));
-            
             TempData["UserId"] = userDto.Id;
             return RedirectToAction("VerifyEmail");
         }
@@ -66,7 +64,7 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
     }
 
     [HttpPost("account-register")]
-    public async Task<IActionResult> Register(UserViewModel viewModel)
+    public async Task<IActionResult> Register(RegisterViewModel viewModel)
     {
         if (!ModelState.IsValid)
         {
@@ -75,15 +73,12 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
 
         var command = new AddUserCommand(viewModel.Email, viewModel.Password);
         var result = await mediator.Send(command);
-
+        
         if (result.IsSuccess)
         {
-            var userDto = await mediator.Send(new GetUserByEmailQuery(viewModel.Email));
-            
-            userDto.GenerateVerificationCode();
-            await mediator.Send(new UpdateUserCommand(userDto));
+            var user = result.ReturnValue as UserDto;
 
-            TempData["UserId"] = userDto.Id;
+            TempData["UserId"] = user.Id;
             return RedirectToAction("VerifyEmail");
         }
 
@@ -97,7 +92,7 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
     [HttpGet("account-reset-password")]
     public IActionResult ResetPassword()
     {
-        return View();
+        return View(new ResetPasswordViewModel());
     }
 
     #endregion
@@ -108,7 +103,6 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
     public async Task<IActionResult> VerifyEmail()
     {
         var userId = TempData.Peek("UserId") as Guid?;
-        TempData.Remove("UserId");
 
         if (userId == null)
         {
@@ -122,29 +116,14 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
             return RedirectToAction("Login");
         }
 
-        if (userDto.VerificationCodeExpiry < DateTimeOffset.Now || userDto.VerificationCodeResendCooldown < DateTimeOffset.Now)
-        {
-            userDto.GenerateVerificationCode();
-        }
+        userDto.GenerateVerificationCode();
+        await mediator.Send(new UpdateUserCommand(userDto));
 
         ViewBag.UserId = userId;
 
-        var mailRequest = new MailRequest
-        {
-            ToEmail = userDto.Email,
-            Subject = "Kod weryfikacyjny do serwisu Alarmist",
-            Body = $"Twój kod weryfikacyjny to: {userDto.VerificationCode}"
-        };
+        await SendEmail(userDto);
 
-        try
-        {
-            await mailService.SendEmailAsync(mailRequest);
-            return View();
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
+        return View();
     }
 
     [HttpPost("account-verification")]
@@ -166,14 +145,32 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
         {
             userDto.EmailVerified = true;
             userDto.VerificationCode = null;
-            userDto.VerificationCodeExpiry = null;
-            userDto.VerificationCodeResendCooldown = null;
             await mediator.Send(new UpdateUserCommand(userDto));
-            return RedirectToAction("Login");
+            TempData.Remove("UserId");
+            return RedirectToAction("Login"); // RedirectToAction("Index", "Home")
         }
 
         ModelState.AddModelError(string.Empty, "Nieprawidłowy kod weryfikacyjny.");
         return View(viewModel);
+    }
+
+    private async Task SendEmail(UserDto userDto)
+    {
+        var mailRequest = new MailRequest
+        {
+            ToEmail = userDto.Email,
+            Subject = "Kod weryfikacyjny do serwisu Alarmist",
+            Body = $"Twój kod weryfikacyjny to: {userDto.VerificationCode}"
+        };
+
+        try
+        {
+            await mailService.SendEmailAsync(mailRequest);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     #endregion
