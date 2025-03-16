@@ -12,7 +12,7 @@
         <header>Rejestracja</header>
     </div>
 
-    <form method="post" asp-page-handler="" asp-antiforgery="true">
+    <form method="post" asp-antiforgery="true">
         <div class="input-box">
             <input type="email" asp-for="Email" class="input-field" placeholder="Email" autocomplete="off" required />
             <span asp-validation-for="Email" class="text-danger"></span>
@@ -23,8 +23,8 @@
         </div>
 
         <div class="input-box">
-            <input type="password" asp-for="PasswordRepeat" class="input-field" placeholder="Powtórz hasło" autocomplete="new-password" required />
-            <span asp-validation-for="PasswordRepeat" class="text-danger"></span>
+            <input type="password" asp-for="RepeatPassword" class="input-field" placeholder="Powtórz hasło" autocomplete="new-password" required />
+            <span asp-validation-for="RepeatPassword" class="text-danger"></span>
         </div>
 
         <div class="input-submit">
@@ -35,7 +35,5 @@
         <div class="form-link">
             <p>Masz już konto? <a href="/account-login">Zaloguj się</a></p>
         </div>
-
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     </form>
 </div>

@@ -113,4 +113,9 @@ a {
 
 .text-danger {
     color: red;
+    font-weight: 600;
+}
+
+.input-field.error {
+    border: 1px solid red;
 }

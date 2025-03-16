@@ -48,9 +48,7 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
         };
 
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-
-        //return RedirectToAction("Index", "Home");
-        return Ok("Zalogowano pomyślnie");
+        return RedirectToAction("Index", "Home");
     }
 
     #endregion
@@ -89,11 +87,10 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
 
     #region Reset Password
 
-    [HttpGet("account-reset-password")]
-    public IActionResult ResetPassword()
-    {
-        return View(new ResetPasswordViewModel());
-    }
+
+    #endregion
+
+    #region Forgot Password
 
     #endregion
 
@@ -121,7 +118,14 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
 
         ViewBag.UserId = userId;
 
-        await SendEmail(userDto);
+        var mailRequest = new MailRequest
+        {
+            ToEmail = userDto.Email,
+            Subject = "Kod weryfikacyjny do serwisu Alarmist",
+            Body = $"Twój kod weryfikacyjny to: {userDto.VerificationCode}"
+        };
+
+        await SendEmail(mailRequest);
 
         return View();
     }
@@ -154,15 +158,8 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
         return View(viewModel);
     }
 
-    private async Task SendEmail(UserDto userDto)
+    private async Task SendEmail(MailRequest mailRequest)
     {
-        var mailRequest = new MailRequest
-        {
-            ToEmail = userDto.Email,
-            Subject = "Kod weryfikacyjny do serwisu Alarmist",
-            Body = $"Twój kod weryfikacyjny to: {userDto.VerificationCode}"
-        };
-
         try
         {
             await mailService.SendEmailAsync(mailRequest);
@@ -171,6 +168,17 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
         {
             throw new Exception(e.Message);
         }
+    }
+
+    #endregion
+
+    #region Logout
+
+    [HttpPost("account-logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Login");
     }
 
     #endregion

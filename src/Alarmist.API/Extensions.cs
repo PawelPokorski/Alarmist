@@ -16,6 +16,8 @@ public static class Extensions
             .AddCookie(options =>
             {
                 options.LoginPath = "/account-login";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20); // Czas wygaśnięcia ciasteczka
+                options.SlidingExpiration = true; // Odnawia ciasteczko przy każdym żądaniu
                 options.LogoutPath = "/account-logout";
             });
 

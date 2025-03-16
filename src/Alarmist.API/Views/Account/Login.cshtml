@@ -1,7 +1,9 @@
 ﻿@using Alarmist.API.Models;
+@using Alarmist.API.Models.Extensions;
+
 @model LoginViewModel
 @{
-    ViewData["Title"] = "Alarmist - Logowanie";
+    ViewData["Title"] = "Alarmist | Logowanie";
     Layout = "_AccountLayout";
 }
 
@@ -12,9 +14,10 @@
         <header>Logowanie</header>
     </div>
 
-    <form method="post" asp-action="Login" asp-controller="Account" asp-antiforgery="true">
+    <form method="post" asp-antiforgery="true">
         <div class="input-box">
             <input type="email" asp-for="Email" class="input-field" placeholder="Email" autocomplete="off" required />
+            
         </div>
         <div class="input-box">
             <input type="password" asp-for="Password" class="input-field" placeholder="Hasło" autocomplete="off" required />
@@ -29,7 +32,13 @@
                 <a href="/account-reset-password">Nie pamiętasz hasła?</a>
             </section>
         </div>
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="text-danger">
+                @ViewData.ModelState.GetFirstError();
+            </div>
+        }
 
         <div class="input-submit">
             <button type="submit" class="submit-btn" id="submit"></button>
