@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Alarmist.API.Models;
+namespace Alarmist.API.Models.Account;
 
 public class VerifyEmailViewModel
 {

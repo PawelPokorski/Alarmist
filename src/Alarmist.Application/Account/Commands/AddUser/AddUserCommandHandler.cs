@@ -16,7 +16,7 @@ public class AddUserCommandHandler(IUserRepository userRepository, IMapper mappe
             return Result.Failure("Email already in use.");
         }
 
-        var user = User.Create(request.Email, request.Password);
+        var user = User.Create(request.Email.ToLower(), request.Password);
 
         userRepository.Add(user);
 

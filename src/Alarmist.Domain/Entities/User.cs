@@ -11,12 +11,15 @@ public class User : Entity
     public string VerificationCode { get; set; }
     public bool EmailVerified { get; set; }
 
+    public Guid? RecoveryId { get; set; }
+
     private User(string email, string passwordHash)
     {
         Email = email;
         PasswordHash = passwordHash;
         DisplayName = email.Substring(0, email.IndexOf('@'));
         EmailVerified = false;
+        RecoveryId = null;
     }
 
     public static User Create(string email, string password)

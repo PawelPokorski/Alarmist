@@ -22,6 +22,7 @@ public class UpdateUserCommandHandler(IUserRepository userRepository, IMapper ma
         user.DisplayName = userDto.DisplayName;
         user.EmailVerified = userDto.EmailVerified;
         user.VerificationCode = userDto.VerificationCode;
+        user.RecoveryId = userDto.RecoveryId;
 
         userRepository.Update(user);
         await unitOfWork.CommitChanges(cancellationToken);

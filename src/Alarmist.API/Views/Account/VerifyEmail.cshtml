@@ -1,4 +1,4 @@
-﻿@using Alarmist.API.Models;
+﻿@using Alarmist.API.Models.Account
 @model VerifyEmailViewModel
 @{
     ViewData["Title"] = "Alarmist - Weryfikacja konta";
@@ -10,7 +10,6 @@
     <div class="form-header">
         <header>Weryfikacja konta</header>
     </div>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <form method="post" asp-action="VerifyEmail" asp-controller="Account" asp-antiforgery="true">
         <div class="number-input-box">
