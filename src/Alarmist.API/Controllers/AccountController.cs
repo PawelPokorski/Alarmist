@@ -95,55 +95,50 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
 
     #region Reset Password
 
-    [HttpGet("account-reset-password/{userGuid}/{recoveryGuid}")]
-    public async Task<IActionResult> ResetPassword(Guid userGuid, Guid recoveryGuid)
+    [HttpGet("account-reset-password/{userId}/{recoveryId}")]
+    public async Task<IActionResult> ResetPassword(Guid userId, Guid recoveryId)
     {
         // Pobierz użytkownika na podstawie userGuid
-        var userDto = await mediator.Send(new GetUserByIdQuery(userGuid));
+        var userDto = await mediator.Send(new GetUserByIdQuery(userId));
 
-        if (userDto == null)
+        // Przekieruj na stronę logowania w przypadku braku użytkownika lub błędnego identyfikatora resetowania hasła
+        if (userDto == null || userDto.RecoveryId != recoveryId)
         {
-            return NotFound("Nie znaleziono użytkownika.");
-        }
-
-        // Sprawdź, czy recoveryGuid jest poprawny
-        if (userDto.RecoveryId != recoveryGuid)
-        {
-            return BadRequest("Nieprawidłowy link resetowania hasła.");
+            return RedirectToAction("Login", "Account");
         }
 
         // Utwórz model ResetPasswordViewModel i przekaż go do widoku
         var model = new ResetPasswordViewModel
         {
-            Email = userDto.Email,
+            Email = userDto.Email
         };
 
         return View(model);
     }
 
-    //[HttpPost("account-reset-password/{userGuid}/{recoveryGuid}")]
-    //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model, Guid userGuid, Guid recoveryGuid)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Sprawdź, czy userGuid i recoveryGuid są nadal poprawne
-    //        var userDto = await mediator.Send(new GetUserByIdQuery(userGuid));
+    [HttpPost("account-reset-password/{userId}/{recoveryId}")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model, Guid userId, Guid recoveryId)
+    {
+        if (ModelState.IsValid)
+        {
+            // Sprawdź, czy userGuid i recoveryGuid są nadal poprawne
+            var userDto = await mediator.Send(new GetUserByIdQuery(userId));
 
-    //        if (userDto == null || userDto.RecoveryId != recoveryGuid)
-    //        {
-    //            return BadRequest("Nieprawidłowy link resetowania hasła.");
-    //        }
+            if (userDto == null || userDto.RecoveryId != recoveryId)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-    //        // Aktualizuj hasło użytkownika
-    //        userDto.Password = model.Password;
-    //        userDto.RecoveryId = null; // Usuń recoveryGuid
-    //        await mediator.Send(new UpdateUserCommand(userDto));
+            // Zaktualizuj hasło oraz usuń identyfikator resetowania hasła
+            userDto.PasswordHash = Domain.Entities.User.HashPassword(model.Password);
+            userDto.RecoveryId = null;
+            await mediator.Send(new UpdateUserCommand(userDto));
 
-    //        return RedirectToAction("Login", "Account");
-    //    }
+            return RedirectToAction("Login", "Account");
+        }
 
-    //    return View(model);
-    //}
+        return View(model);
+    }
 
     #endregion
 
@@ -261,7 +256,6 @@ public class AccountController(IMediator mediator, IMailService mailService) : C
         ModelState.AddModelError(string.Empty, "Nieprawidłowy kod weryfikacyjny.");
         return View(viewModel);
     }
-
 
     #endregion
 

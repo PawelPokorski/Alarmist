@@ -12,7 +12,7 @@ public class UserDto
     public string VerificationCode { get; set; }
     public bool EmailVerified { get; set; }
 
-    public Guid RecoveryId { get; set; }
+    public Guid? RecoveryId { get; set; }
 
     public bool VerifyPassword(string password)
     {
